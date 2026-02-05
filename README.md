@@ -11,7 +11,7 @@ https://fredand04.github.io/lab4-jagstiles/
 ![Basemap Screenshot](img/base.png)
 A customized basemap created in Mapbox Studio with modified colors, labels, and symbols. I could not get the standard monochrome map to work with QGIS so I went with this on the fly.
 
-### Tile Set 2 – COVID-19 Choropleth Layer
+### Tile Set 2 – COVID-19 Choropleth Layer   
 ![COVID Choropleth Screenshot](img/map2.png)
 A raster tile layer visualizing COVID-19 case counts by county in Washington State using a choropleth theme.
 
