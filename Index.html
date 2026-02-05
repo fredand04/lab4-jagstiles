@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Washington Tile Map Project</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.map-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(255,255,255,0.85);
+  padding: 10px;
+  max-width: 350px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  z-index: 10;
+}
+
+#layer-menu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255,255,255,0.9);
+  padding: 10px;
+  border: 2px solid black;
+  font-size: 14px;
+  z-index: 11;
+}
+</style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<div class="map-overlay">
+  <h2>Washington State Custom Tile Maps</h2>
+  <p><b>Tile Set 1:</b> Customized basemap created in Mapbox Studio.</p>
+  <p><b>Tile Set 2:</b> County-level COVID-19 choropleth raster tiles.</p>
+  <p><b>Tile Set 3:</b> Combined basemap and COVID thematic layer.</p>
+  <p><b>Tile Set 4:</b> OwnedElectric vehicle thematic map with sustainability theme.</p>
+</div>
+
+<div id="layer-menu">
+  <strong>Toggle Layers</strong><br>
+  <label><input type="checkbox" id="baseLayer" checked> Basemap</label><br>
+  <label><input type="checkbox" id="tile2Layer" checked> COVID Choropleth</label><br>
+  <label><input type="checkbox" id="tile3Layer" checked> Combined Layer</label><br>
+  <label><input type="checkbox" id="tile4Layer" checked> EV Theme Map</label>
+</div>
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXdlc29tZWd1eWUiLCJhIjoiY21sOWF3azh6MDEwbDNjcGx0NmtxdGZxdyJ9.4l9EQaC-LA_OmdxQF_qLIw';
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/light-v11',
+  center: [-120.7401, 47.7511],
+  zoom: 6
+});
+
+map.on('load', () => {
+
+  map.addSource('base-tiles', {
+    type: 'raster',
+    tiles: ['assets/base/{z}/{x}/{y}.png'],
+    tileSize: 256
+  });
+  //base
+  map.addLayer({ id: 'base', type: 'raster', source: 'base-tiles' });
+
+  // chloropleth
+  map.addSource('tile2-tiles', { type: 'raster', tiles: ['assets/tile2/{z}/{x}/{y}.png'], tileSize: 256 });
+  map.addLayer({ id: 'tile2', type: 'raster', source: 'tile2-tiles', paint: { 'raster-opacity': 0.8 } });
+
+  // combined
+  map.addSource('tile3-tiles', { type: 'raster', tiles: ['assets/tile3/{z}/{x}/{y}.png'], tileSize: 256 });
+  map.addLayer({ id: 'tile3', type: 'raster', source: 'tile3-tiles', paint: { 'raster-opacity': 0.8 } });
+
+  // EV cars
+  map.addSource('tile4-tiles', { type: 'raster', tiles: ['assets/tile4/{z}/{x}/{y}.png'], tileSize: 256 });
+  map.addLayer({ id: 'tile4', type: 'raster', source: 'tile4-tiles', paint: { 'raster-opacity': 0.8 } });
+
+  function toggleLayer(checkboxId, layerId) {
+    document.getElementById(checkboxId).addEventListener('change', function () {
+      map.setLayoutProperty(layerId, 'visibility', this.checked ? 'visible' : 'none');
+    });
+  }
+
+  toggleLayer('baseLayer', 'base');
+  toggleLayer('tile2Layer', 'tile2');
+  toggleLayer('tile3Layer', 'tile3');
+  toggleLayer('tile4Layer', 'tile4');
+});
+</script>
+
+</body>
+</html>
